@@ -53,12 +53,25 @@ const contacts = [
 //const contacts = null;
 
 //get contacts
-app.get("/api/contacts/all", (req, res) => {
-  if (contacts) {
+app.get("/api/contacts/", (req, res) => {
+  const getContacts = async () => {
+    const contacts = await Contact.find({});
+
+    if (contacts) {
+      return res.status(200).json(contacts);
+    } else {
+      return res.status(500).json({ message: "failed to fetch contacts" });
+      //throw new Error("failed to fetch contacts");
+    }
+  };
+
+  getContacts();
+
+  /*if (contacts) {
     return res.status(200).json(contacts);
   } else {
     return res.status(404).json({ message: "contacts not found" });
-  }
+  }*/
 });
 
 //get single contact
