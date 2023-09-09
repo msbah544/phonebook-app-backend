@@ -11,13 +11,14 @@ dotenv.config();
 const port = process.env.PORT;
 const app = express();
 
+//connect to DB
+await connectToDB();
+
 //set up port
 
 app.listen(port, () => {
   console.log(`Server listening on port ${port}`);
 });
-
-await connectToDB();
 
 //middlewares
 app.use(express.json());
