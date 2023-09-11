@@ -50,6 +50,39 @@ userSchema.statics.signup = async function (email, password) {
   return user;
 };
 
+userSchema.statics.login = async function (email, password) {
+  //validate client input
+  if (!email || !password) {
+    throw Error("All input fields must be filled");
+  }
+  //validate email & password
+
+  if (!validator.isEmail(email)) {
+    throw Error("A valid email is required");
+  }
+
+  /*if (!validator.isStrongPassword(password)) {
+    throw Error("A strong password is required");
+  }*/
+
+  //check if user exists
+  const user = await this.findOne({ email });
+
+  if (!user) {
+    throw Error("The email you entered is not registered, signup first!");
+  }
+
+  //compare password
+
+  const match = await bcrypt.compare(password, user.password);
+
+  if (!match) {
+    throw Error("Incorrect password");
+  }
+
+  return user;
+};
+
 const User = model("user", userSchema);
 
 export default User;
