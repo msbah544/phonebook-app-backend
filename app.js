@@ -1,10 +1,8 @@
 import express from "express";
 import dotenv from "dotenv";
-import crypto from "crypto";
-import Contact from "./models/Contact.js";
 import { connectToDB } from "./utils/database.js";
-import { getContacts } from "./controllers/contactsController.js";
-import router from "./routes/router.js";
+import contactRoutes from "./routes/contact.js";
+import userRoutes from "./routes/user.js";
 
 dotenv.config();
 
@@ -29,23 +27,5 @@ app.use((req, res, next) => {
 
 //ROUTES
 
-const contacts = [
-  {
-    id: 1,
-    name: "Omar Jasseh",
-    email: "omar@jassehcodecamp.com",
-    phone: 3100948,
-    address: "Sanchaba",
-  },
-
-  {
-    id: 2,
-    name: "Buba Conteh",
-    email: "buba@jassehcodecamp.com",
-    phone: 3104015,
-    address: "Bakoteh",
-  },
-];
-//const contacts = null;
-
-app.use("/api/contacts", router);
+app.use("/api/contacts", contactRoutes);
+app.use("/api/user", userRoutes);
