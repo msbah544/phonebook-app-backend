@@ -2,12 +2,12 @@ import Contact from "../models/Contact.js";
 
 //get all contacts
 export const getContacts = async (req, res) => {
-  const contacts = await Contact.find({});
+  try {
+    const contacts = await Contact.find({});
 
-  if (contacts) {
     return res.status(200).json(contacts);
-  } else {
-    return res.status(500).json({ message: "contacts not found" });
+  } catch (error) {
+    return res.status(500).json({ message: `faliure:${error.message}` });
   }
 };
 
@@ -15,12 +15,17 @@ export const getContacts = async (req, res) => {
 export const getContactByID = async (req, res) => {
   const contactID = req.params.id;
 
-  const contact = await Contact.findById(contactID);
-
-  if (!contact) {
-    return res.status(404).json({ error: "contact not founs" });
+  try {
+    const contact = await Contact.findById(contactID);
+    if (contact) {
+      return res.status(200).json(contact);
+    }
+    return res
+      .status(404)
+      .json({ message: `faliure: contact with id:${contactID} doesn't exist` });
+  } catch (error) {
+    return res.status(404).json({ error: `faliure: ${error.message}` });
   }
-  return res.status(200).json(contact);
 };
 
 //create new contact
@@ -61,9 +66,15 @@ export const deleteContact = async (req, res) => {
   const id = req.params.id;
 
   try {
-    const deletedContact = await Contact.findByIdAndDelete({ _id: id });
+    const exists = await Contact.findById(id);
+    if (exists) {
+      const deletedContact = await Contact.findOneAndDelete({ _id: id });
 
-    return res.status(200).json(deletedContact);
+      return res.status(200).json(deletedContact);
+    }
+    return res
+      .status(404)
+      .json({ message: `faliure: contact with id:${id} doesn't exist` });
   } catch (error) {
     return res.status(400).json({ message: `faliure: ${error.message}` });
   }
