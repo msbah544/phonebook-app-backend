@@ -3,11 +3,14 @@ import dotenv from "dotenv";
 import { connectToDB } from "./utils/database.js";
 import contactRoutes from "./routes/contact.js";
 import userRoutes from "./routes/user.js";
+import cors from "cors";
 
 dotenv.config();
 
 const port = process.env.PORT;
 const app = express();
+
+app.use(cors());
 
 //connect to DB
 await connectToDB();

@@ -3,7 +3,7 @@ import Contact from "../models/Contact.js";
 //get all contacts
 export const getContacts = async (req, res) => {
   try {
-    const contacts = await Contact.find({});
+    const contacts = await Contact.find({}).sort({ createdAt: -1 });
 
     return res.status(200).json(contacts);
   } catch (error) {
@@ -46,12 +46,12 @@ export const updateContact = async (req, res) => {
   const contact = req.body;
 
   try {
-    const updatedContact = await Contact.findOneAndUpdate(
+    const updatedContact = await Contact.findByIdAndUpdate(
       contact._id,
       {
         ...contact,
-      },
-      { returnOriginal: false }
+      }
+      //{ returnOriginal: false }
     );
 
     return res.status(200).json(updatedContact);
