@@ -46,13 +46,9 @@ export const updateContact = async (req, res) => {
   const contact = req.body;
 
   try {
-    const updatedContact = await Contact.findByIdAndUpdate(
-      contact._id,
-      {
-        ...contact,
-      }
-      //{ returnOriginal: false }
-    );
+    const updatedContact = await Contact.findByIdAndUpdate(contact._id, {
+      ...contact,
+    });
 
     return res.status(200).json(updatedContact);
   } catch (error) {
